@@ -50,9 +50,22 @@ exports.addMenuItem = async (req, res) => {
 exports.getMenuItems = async (req, res) => {
     const { menuId } = req.params
     try {
-        const result = await MenuItem.find({ menuId: menuId })
+        const result = await MenuItem.find({ menuId: menuId }).populate('menuId')
         if (!result) {
             return res.status(404).json({ message: "No menu items found for this menu" });
+        }
+        res.status(200).json(result)
+    } catch (error) {
+        console.log(error);
+        res.status(500).json("Internal Server error")
+    }
+}
+
+exports.getAllMenu = async (req, res) => {
+    try {
+        const result = await Menu.find()
+        if (!result) {
+            return res.status(404).json({ message: "No menu found " });
         }
         res.status(200).json(result)
     } catch (error) {
